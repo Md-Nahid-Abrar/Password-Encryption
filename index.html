@@ -188,53 +188,49 @@ onclick="copyResult('decryptResult')">
 
 <script>
 
-let encryption_key = 2;
+const API_URL = "https://password-encryption-backend.vercel.app";
 
-function encrypt(){
+async function encrypt(){
 
 let text=document.getElementById("encryptInput").value;
-let encrypted="";
 
-for(let i of text){
+let response = await fetch(API_URL + "/api/encrypt", {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        text:text
+    })
+});
 
-if(i==='z')
-encrypted+='a';
-
-else if(i===' ')
-encrypted+='$';
-
-else
-encrypted+=String.fromCharCode(i.charCodeAt(0)+encryption_key);
-
-}
+let data = await response.json();
 
 let box=document.getElementById("encryptResult");
-box.innerHTML=encrypted;
+box.innerHTML=data.encrypted;
 animate(box);
 
 }
 
 
-function decrypt(){
+async function decrypt(){
 
 let text=document.getElementById("decryptInput").value;
-let decrypted="";
 
-for(let i of text){
+let response = await fetch(API_URL + "/api/decrypt", {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        text:text
+    })
+});
 
-if(i==='a')
-decrypted+='z';
-
-else if(i==='$')
-decrypted+=' ';
-
-else
-decrypted+=String.fromCharCode(i.charCodeAt(0)-encryption_key);
-
-}
+let data = await response.json();
 
 let box=document.getElementById("decryptResult");
-box.innerHTML=decrypted;
+box.innerHTML=data.decrypted;
 animate(box);
 
 }
