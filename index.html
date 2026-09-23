@@ -22,13 +22,14 @@ body{
 .box{
     background:#222;
     width:350px;
-    padding:25px;
+    padding:10px 25px 25px 25px;
     border-radius:15px;
     box-shadow:0 0 15px #000;
 }
 
 h2{
     color:#00e676;
+    margin-top:5px;
 }
 
 .example{
@@ -110,15 +111,12 @@ input{
         opacity:1;
     }
 }
-
 </style>
 </head>
 
 <body>
 
-
 <div class="container">
-
 
 <div class="box">
 
@@ -130,34 +128,25 @@ abcd12 → cdef34
 </div>
 
 <div class="input-area">
-
-<input id="encryptInput"
-placeholder="Enter plain text"
+<input id="encryptInput" placeholder="Enter plain text"
 onkeydown="if(event.key==='Enter') encrypt()">
 
 <img class="copy-icon"
 src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyText('encryptInput')">
-
 </div>
 
-<button class="action-btn" onclick="encrypt()">
-Encrypt
-</button>
-
+<button class="action-btn" onclick="encrypt()">Encrypt</button>
 
 <div class="output-area">
-
 <div class="result" id="encryptResult"></div>
 
 <img class="copy-icon"
 src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyResult('encryptResult')">
-
 </div>
 
 </div>
-
 
 
 <div class="box">
@@ -169,11 +158,9 @@ Example:<br>
 cdef34 → abcd12
 </div>
 
-
 <div class="input-area">
 
-<input id="decryptInput"
-placeholder="Enter encrypted text"
+<input id="decryptInput" placeholder="Enter encrypted text"
 onkeydown="if(event.key==='Enter') decrypt()">
 
 <img class="copy-icon"
@@ -182,11 +169,7 @@ onclick="copyText('decryptInput')">
 
 </div>
 
-
-<button class="action-btn" onclick="decrypt()">
-Decrypt
-</button>
-
+<button class="action-btn" onclick="decrypt()">Decrypt</button>
 
 <div class="output-area">
 
@@ -200,14 +183,12 @@ onclick="copyResult('decryptResult')">
 
 </div>
 
-
 </div>
 
 
 <script>
 
 let encryption_key = 2;
-
 
 function encrypt(){
 
@@ -234,7 +215,6 @@ animate(box);
 }
 
 
-
 function decrypt(){
 
 let text=document.getElementById("decryptInput").value;
@@ -258,7 +238,6 @@ box.innerHTML=decrypted;
 animate(box);
 
 }
-
 
 
 function animate(element){
@@ -288,7 +267,6 @@ document.getElementById(id).innerText
 }
 
 </script>
-
 
 </body>
 </html>
