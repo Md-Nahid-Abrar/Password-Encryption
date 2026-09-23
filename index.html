@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Password Encryptor</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+
+.container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:30px;
+}
+
+.box{
+    background:#222;
+    width:350px;
+    padding:10px 25px 25px 25px;
+    border-radius:15px;
+    box-shadow:0 0 15px #000;
+}
+
+h2{
+    color:#00e676;
+    margin-top:5px;
+}
+
+.example{
+    background:#333;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:15px;
+    color:#ddd;
+}
+
+.input-area,
+.output-area{
+    position:relative;
+    display:flex;
+    align-items:center;
+    margin:10px 0;
+}
+
+input{
+    width:100%;
+    padding:12px 45px 12px 12px;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+}
+
+.copy-icon{
+    position:absolute;
+    right:12px;
+    width:22px;
+    height:22px;
+    cursor:pointer;
+    opacity:.7;
+    transition:.2s;
+}
+
+.copy-icon:hover{
+    opacity:1;
+    transform:scale(1.15);
+}
+
+.action-btn{
+    width:95%;
+    padding:12px;
+    background:#00c853;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.action-btn:hover{
+    background:#009624;
+}
+
+.result{
+    flex:1;
+    background:white;
+    color:black;
+    padding:12px 45px 12px 12px;
+    border-radius:8px;
+    min-height:20px;
+    text-align:left;
+    overflow-wrap:break-word;
+}
+
+.animate{
+    animation:pop .5s ease;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(.8);
+        opacity:.5;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="box">
+
+<h2>Encrypt</h2>
+
+<div class="example">
+Example:<br>
+abcd12 → cdef34
+</div>
+
+<div class="input-area">
+<input id="encryptInput" placeholder="Enter plain text"
+onkeydown="if(event.key==='Enter') encrypt()">
+
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
+onclick="copyText('encryptInput')">
+</div>
+
+<button class="action-btn" onclick="encrypt()">Encrypt</button>
+
+<div class="output-area">
+<div class="result" id="encryptResult"></div>
+
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
+onclick="copyResult('encryptResult')">
+</div>
+
+</div>
+
+
+<div class="box">
+
+<h2>Decrypt</h2>
+
+<div class="example">
+Example:<br>
+cdef34 → abcd12
+</div>
+
+<div class="input-area">
+
+<input id="decryptInput" placeholder="Enter encrypted text"
+onkeydown="if(event.key==='Enter') decrypt()">
+
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
+onclick="copyText('decryptInput')">
+
+</div>
+
+<button class="action-btn" onclick="decrypt()">Decrypt</button>
+
+<div class="output-area">
+
+<div class="result" id="decryptResult"></div>
+
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
+onclick="copyResult('decryptResult')">
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const API_URL = "https://password-encryption-backend.vercel.app";
+
+async function encrypt(){
+
+let text=document.getElementById("encryptInput").value;
+
+let response = await fetch(API_URL + "/api/encrypt", {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        text:text
+    })
+});
+
+let data = await response.json();
+
+let box=document.getElementById("encryptResult");
+box.innerHTML=data.encrypted;
+animate(box);
+
+}
+
+
+async function decrypt(){
+
+let text=document.getElementById("decryptInput").value;
+
+let response = await fetch(API_URL + "/api/decrypt", {
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        text:text
+    })
+});
+
+let data = await response.json();
+
+let box=document.getElementById("decryptResult");
+box.innerHTML=data.decrypted;
+animate(box);
+
+}
+
+
+function animate(element){
+
+element.classList.remove("animate");
+void element.offsetWidth;
+element.classList.add("animate");
+
+}
+
+
+function copyText(id){
+
+navigator.clipboard.writeText(
+document.getElementById(id).value
+);
+
+}
+
+
+function copyResult(id){
+
+navigator.clipboard.writeText(
+document.getElementById(id).innerText
+);
+
+}
+
+</script>
+
+</body>
+</html>
