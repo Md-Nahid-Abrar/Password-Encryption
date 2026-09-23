@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <title>Password Encryptor</title>
 
 <style>
-
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#111;
     color:white;
     text-align:center;
     padding:50px;
 }
-
 
 .container{
     display:flex;
@@ -21,7 +18,6 @@ body{
     gap:30px;
     flex-wrap:wrap;
 }
-
 
 .box{
     background:#222;
@@ -31,11 +27,7 @@ body{
     box-shadow:0 0 15px #000;
 }
 
-
-h2{
-    color:#00e676;
-}
-
+h2{color:#00e676;}
 
 .example{
     background:#333;
@@ -45,42 +37,37 @@ h2{
     color:#ddd;
 }
 
-
-.input-area,
-.output-area{
+.input-area,.output-area{
+    position:relative;
     display:flex;
     align-items:center;
-    gap:5px;
     margin:10px 0;
 }
 
-
 input{
-
-    flex:1;
-    padding:12px;
+    width:100%;
+    padding:12px 45px 12px 12px;
     border-radius:8px;
     border:none;
     font-size:16px;
-
 }
 
-
-.copy-btn{
-
-    width:70px;
-    padding:12px;
-    background:#555;
-    color:white;
-    border:none;
-    border-radius:8px;
+.copy-icon{
+    position:absolute;
+    right:12px;
+    width:22px;
+    height:22px;
     cursor:pointer;
-
+    opacity:.7;
+    transition:.2s;
 }
 
+.copy-icon:hover{
+    opacity:1;
+    transform:scale(1.15);
+}
 
 .action-btn{
-
     width:95%;
     padding:12px;
     background:#00c853;
@@ -89,311 +76,195 @@ input{
     border-radius:8px;
     font-size:16px;
     cursor:pointer;
-
 }
 
-
-.action-btn:hover{
-
-    background:#009624;
-
-}
-
-
+.action-btn:hover{background:#009624;}
 
 .result{
-
     flex:1;
+    position:relative;
     background:white;
     color:black;
-    padding:12px;
+    padding:12px 45px 12px 12px;
     border-radius:8px;
     text-align:left;
+    min-height:20px;
     overflow-wrap:break-word;
-
 }
-
-
 
 .animate{
-
     animation:pop .5s ease;
-
 }
 
-
 @keyframes pop{
-
-    0%{
+    from{
         transform:scale(.8);
         opacity:.5;
     }
-
-    100%{
+    to{
         transform:scale(1);
         opacity:1;
     }
-
 }
-
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <h1>Password Encryption Tool</h1>
 
-
-
 <div class="container">
-
-
-
-<!-- Encrypt -->
-
 
 <div class="box">
 
 <h2>Encrypt</h2>
-
 
 <div class="example">
 Example:<br>
 abcd12 → cdef34
 </div>
 
-
 <div class="input-area">
+<input id="encryptInput" placeholder="Enter plain text"
+onkeydown="if(event.key==='Enter') encrypt()">
 
-<input id="encryptInput" placeholder="Enter plain text">
-
-<button class="copy-btn"
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyText('encryptInput')">
-Copy
-</button>
-
 </div>
 
-
-
-<button class="action-btn"
-onclick="encrypt()">
-Encrypt
-</button>
-
-
+<button class="action-btn" onclick="encrypt()">Encrypt</button>
 
 <div class="output-area">
+<div class="result" id="encryptResult">Encrypted hash</div>
 
-<div class="result" id="encryptResult">
- 
-</div>
-
-
-<button class="copy-btn"
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyResult('encryptResult')">
-Copy
-</button>
-
-
 </div>
 
-
 </div>
-
-
-
-
-
-<!-- Decrypt -->
 
 
 <div class="box">
 
 <h2>Decrypt</h2>
 
-
 <div class="example">
 Example:<br>
 cdef34 → abcd12
 </div>
 
-
-
 <div class="input-area">
 
-<input id="decryptInput" placeholder="Enter encrypted text">
+<input id="decryptInput" placeholder="Enter encrypted text"
+onkeydown="if(event.key==='Enter') decrypt()">
 
-<button class="copy-btn"
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyText('decryptInput')">
-Copy
-</button>
-
 
 </div>
 
-
-
-<button class="action-btn"
-onclick="decrypt()">
-Decrypt
-</button>
-
+<button class="action-btn" onclick="decrypt()">Decrypt</button>
 
 
 <div class="output-area">
 
+<div class="result" id="decryptResult">Decrypted text</div>
 
-<div class="result" id="decryptResult">
- 
-</div>
-
-
-<button class="copy-btn"
+<img class="copy-icon"
+src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png"
 onclick="copyResult('decryptResult')">
-Copy
-</button>
-
 
 </div>
 
-
 </div>
 
-
-
 </div>
-
-
-
-
 
 
 <script>
 
-
 let encryption_key = 2;
-
-
 
 function encrypt(){
 
-
 let text=document.getElementById("encryptInput").value;
-
 let encrypted="";
 
-
 for(let i of text){
-
 
 if(i==='z')
 encrypted+='a';
 
-
 else if(i===' ')
 encrypted+='$';
-
 
 else
 encrypted+=String.fromCharCode(i.charCodeAt(0)+encryption_key);
 
-
 }
-
-
 
 let box=document.getElementById("encryptResult");
-
 box.innerHTML=encrypted;
-
 animate(box);
 
-
 }
-
-
 
 
 function decrypt(){
 
-
 let text=document.getElementById("decryptInput").value;
-
 let decrypted="";
 
-
 for(let i of text){
-
 
 if(i==='a')
 decrypted+='z';
 
-
 else if(i==='$')
 decrypted+=' ';
-
 
 else
 decrypted+=String.fromCharCode(i.charCodeAt(0)-encryption_key);
 
-
 }
-
-
 
 let box=document.getElementById("decryptResult");
-
 box.innerHTML=decrypted;
-
 animate(box);
 
-
 }
-
-
-
 
 
 function animate(element){
 
 element.classList.remove("animate");
-
 void element.offsetWidth;
-
 element.classList.add("animate");
 
 }
 
 
-
-
 function copyText(id){
 
-let text=document.getElementById(id);
-
-navigator.clipboard.writeText(text.value);
+navigator.clipboard.writeText(
+document.getElementById(id).value
+);
 
 }
-
 
 
 function copyResult(id){
 
-let text=document.getElementById(id).innerText;
-
-navigator.clipboard.writeText(text);
+navigator.clipboard.writeText(
+document.getElementById(id).innerText
+);
 
 }
 
-
 </script>
-
-
 
 </body>
 </html>
